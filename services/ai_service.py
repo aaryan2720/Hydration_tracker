@@ -10,7 +10,7 @@ from config.ai_config import AIConfig
 class AIService:
     def __init__(self):
         self.config = AIConfig()
-        self.analyzer =  WaterIntakeAnalyzer()
+        self.analyzer = WaterIntakeAnalyzer()
         openai.api_key = self.config.get_openai_config()['api_key']
     
     async def generate_ai_report(self, user_data: Dict, water_log: List[Dict], weather_data: Dict) -> Dict:

@@ -1,0 +1,242 @@
+/* Water Tracker Enhanced Styles */
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-shadow: rgba(0, 0, 0, 0.1);
+    --primary-gradient: linear-gradient(45deg, #0d6efd, #0dcaf0);
+    --secondary-gradient: linear-gradient(45deg, #0dcaf0, #0d6efd);
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --hover-transform: translateY(-5px);
+}
+
+.navbar {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 15px var(--glass-shadow);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dashboard-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.water-progress, .water-log, .chart-container, .card {
+    background: var(--glass-bg);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 25px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.water-progress:hover, .water-log:hover, .chart-container:hover, .card:hover {
+    transform: var(--hover-transform);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.progress {
+    height: 25px;
+    margin: 15px 0;
+    border-radius: 15px;
+    background: rgba(0,0,0,0.05);
+}
+
+.progress-bar {
+    background: var(--secondary-gradient);
+    border-radius: 15px;
+}
+
+.add-water-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    font-size: 24px;
+    background: var(--primary-gradient);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.add-water-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--bs-primary);
+}
+
+.nav-link.active {
+    color: var(--bs-primary);
+    font-weight: 500;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    right: 1rem;
+    height: 2px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
+}
+
+/* Glass Container Styles */
+.glass-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+    padding: 20px;
+    margin: 20px 0;
+}
+
+/* Enhanced Water Glass */
+.water-glass {
+    width: 180px;
+    height: 250px;
+    background: linear-gradient(135deg, var(--glass-bg), rgba(255, 255, 255, 0.05));
+    border: 2px solid var(--glass-border);
+    border-radius: 15px 15px 40px 40px;
+    position: relative;
+    margin: 30px auto;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--glass-shadow);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.water-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+    animation: glass-shine 3s infinite;
+}
+
+.water-level {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(180deg, var(--secondary-blue), var(--primary-blue));
+    border-radius: 0 0 38px 38px;
+    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.water-level::before,
+.water-level::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 200%;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    animation: wave 3s infinite linear;
+}
+
+.water-level::after {
+    top: 10px;
+    animation: wave 3s infinite linear reverse;
+    opacity: 0.6;
+}
+
+/* Quick Add Buttons */
+.quick-add-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    padding: 12px 24px;
+    color: var(--deep-blue);
+    font-weight: 600;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.quick-add-btn:hover {
+    background: var(--primary-blue);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(37, 117, 252, 0.3);
+}
+
+/* Achievement Badges */
+.achievement {
+    background: var(--glass-bg);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.achievement.achieved {
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes wave {
+    0% { transform: translateX(0) translateZ(0) scaleY(1); }
+    50% { transform: translateX(-25%) translateZ(0) scaleY(0.8); }
+    100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+}
+
+@keyframes glass-shine {
+    0% { transform: translateX(-100%); }
+    50%, 100% { transform: translateX(100%); }
+}
+
+/* Water Log Table */
+.water-log-table {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+}
+
+.water-log-table th {
+    background: rgba(37, 117, 252, 0.1);
+    color: var(--deep-blue);
+    font-weight: 600;
+    padding: 15px;
+}
+
+.water-log-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+/* Toast Notifications */
+.toast {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+}

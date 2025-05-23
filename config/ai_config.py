@@ -1,10 +1,11 @@
 from typing import Dict
 
+
 class AIConfig:
     def __init__(self):
         # OpenAI API configuration
         self.openai_config = {
-            "api_key": "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",  # Replace with actual API key
+            "api_key": "",  # Replace with actual API key
             "model": "gpt-4",  # or another appropriate model
             "max_tokens": 1000,
             "temperature": 0.7

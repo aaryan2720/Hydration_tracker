@@ -12,6 +12,8 @@ from sms_service import test_sms_service, send_goal_achievement_notification, se
 # Load environment variables
 load_dotenv()
 
+
+
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key')
 

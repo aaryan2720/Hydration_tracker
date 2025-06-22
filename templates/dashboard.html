@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="stylesheet" href="/static/css/water-tracker.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    </style>
+    <link rel="stylesheet" href="/static/css/water-jar.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
@@ -26,20 +25,8 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-trophy"></i> Achievements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-people"></i> Community</a>
-                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item me-3">
-                        <a class="nav-link" href="#" data-bs-toggle="tooltip" title="Notifications">
-                            <i class="bi bi-bell"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
-                        </a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="profile-icon rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px; background: var(--primary-gradient); color: white; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
@@ -59,96 +46,103 @@
     </nav>
 
     <div class="dashboard-container">
-        <!-- Water Glass Container -->
-        <div class="glass-container mb-4">
-            <div class="row align-items-center">
-                <div class="col-md-4 text-center">
-                    <div class="water-glass">
-                        <div id="waterLevel" class="water-level"></div>
-                    </div>
-                    <div class="mt-3">
-                        <h4 id="currentIntake">0 ml</h4>
-                        <p class="text-muted">of <span id="dailyGoal">2500 ml</span></p>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="quick-add-container">
-                        <button class="quick-add-btn" onclick="quickAdd(250)">
-                            <i class="bi bi-cup"></i> 250ml
-                        </button>
-                        <button class="quick-add-btn" onclick="quickAdd(500)">
-                            <i class="bi bi-cup-straw"></i> 500ml
-                        </button>
-                        <button class="quick-add-btn" onclick="quickAdd(1000)">
-                            <i class="bi bi-water"></i> 1000ml
-                        </button>
-                    </div>
-                    <div class="achievements mt-4">
-                        <h5>Today's Achievements</h5>
-                        <div class="d-flex flex-wrap">
-                            <div class="achievement" data-achievement="firstDrop" title="First Drop">
-                                <i class="bi bi-droplet"></i>
-                                <p>First Drop</p>
-                            </div>
-                            <div class="achievement" data-achievement="dailyGoal" title="Daily Goal Achieved">
-                                <i class="bi bi-trophy"></i>
-                                <p>Goal Achieved</p>
-                            </div>
-                            <div class="achievement" data-achievement="hydrationMaster" title="Hydration Master">
-                                <i class="bi bi-star"></i>
-                                <p>Hydration Master</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- --Water Intake Chart-- -->
-        <div class="chart-container">
-            <h3>Water Intake History</h3>
-            <div class="btn-group mb-3" role="group">
-                <button type="button" class="btn btn-outline-primary" onclick="updateChart('weekly')">Weekly</button>
-                <button type="button" class="btn btn-outline-primary" onclick="updateChart('monthly')">Monthly</button>
-            </div>
-            <canvas id="waterIntakeChart"></canvas>
-        </div>
-
-        <!--- Goal Setting --->
+        <!-- User Profile Display and Edit -->
         <div class="card mb-4">
             <div class="card-body">
-                <h3>Personal Hydration Goal</h3>
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <div class="input-group mb-3">
-                            <input type="number" class="form-control" id="dailyGoalInput" placeholder="Enter goal in ml">
-                            <button class="btn btn-primary" onclick="updateDailyGoal()">Update Goal</button>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Your Hydration Profile</h3>
+                    <button class="btn btn-primary" onclick="toggleProfileEdit()"><i class="bi bi-pencil"></i> Edit Profile</button>
+                </div>
+                
+                <!-- Profile Display View -->
+                <div id="profileDisplay" class="profile-info mt-3">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <i class="bi bi-gender-ambiguous profile-icon"></i>
+                            <h5 class="mt-2" id="profileGender">Loading...</h5>
+                            <p class="text-muted">Gender</p>
                         </div>
-                        <div class="form-text text-muted">
-                            <i class="bi bi-info-circle"></i> Your goal will be adjusted based on:
-                            <ul class="list-unstyled ms-3 small">
-                                <li>• Weather conditions</li>
-                                <li>• Activity level</li>
-                                <li>• Body weight</li>
-                            </ul>
+                        <div class="col-md-3">
+                            <i class="bi bi-speedometer2 profile-icon"></i>
+                            <h5 class="mt-2" id="profileWeight">Loading...</h5>
+                            <p class="text-muted">Weight (kg)</p>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <h5 class="card-title">Smart Recommendations</h5>
-                                <p class="mb-2">Base recommendation: <span id="recommendedIntake">2500 ml</span></p>
-                                <p class="mb-2">Weather adjustment: <span id="weatherAdjustment">+200 ml</span></p>
-                                <p class="mb-2">Activity adjustment: <span id="activityAdjustment">+300 ml</span></p>
-                                <hr>
-                                <p class="mb-0 fw-bold">Final recommendation: <span id="finalRecommendation">3000 ml</span></p>
-                            </div>
+                        <div class="col-md-3">
+                            <i class="bi bi-activity profile-icon"></i>
+                            <h5 class="mt-2" id="profileActivity">Loading...</h5>
+                            <p class="text-muted">Activity Level</p>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Profile Edit Form -->
+                <div id="profileEdit" class="mt-3" style="display: none;">
+                    <form id="profileUpdateForm" class="row g-3" onsubmit="updateProfile(event)">
+                        <div class="col-md-6">
+                            <label for="editName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editGender" class="form-label">Gender</label>
+                            <select class="form-select" id="editGender" required>
+                                <option value="">Choose...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editWeight" class="form-label">Weight (kg)</label>
+                            <input type="number" class="form-control" id="editWeight" min="1" step="0.1" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editActivity" class="form-label">Activity Level</label>
+                            <select class="form-select" id="editActivity" required>
+                                <option value="">Choose...</option>
+                                <option value="sedentary">Sedentary</option>
+                                <option value="light">Light Exercise</option>
+                                <option value="moderate">Moderate Exercise</option>
+                                <option value="active">Very Active</option>
+                                <option value="extra_active">Extra Active</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" onclick="toggleProfileEdit()">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
+        <!-- Water Progress Section -->
+<div class="water-progress">
+    <div class="water-jar">
+        <div class="water-level-label">0%</div>
+        <div class="measurement measurement-3000">3L</div>
+        <div class="measurement measurement-2000">2L</div>
+        <div class="measurement measurement-1000">1L</div>
+        <div class="measurement measurement-0">0L</div>
+    </div>
+    <div class="progress-info">
+        <div class="intake-info">
+            <div class="today-intake">
+                <h5>Today's Intake</h5>
+                <p>Current: <span id="currentIntake">0 ml</span></p>
+                <p>Goal: <span id="dailyGoal">3000 ml</span></p>
+            </div>
+            <div class="yesterday-intake">
+                <h5>Yesterday's Intake</h5>
+                <p>Total: <span id="yesterdayIntake">0 ml</span></p>
+                <p>Next Refresh: <span id="nextRefresh">--:--</span></p>
+            </div>
+        </div>
+        <div class="quick-add-buttons">
+            <button onclick="quickAdd(250)">+250ml</button>
+            <button onclick="quickAdd(500)">+500ml</button>
+            <button onclick="quickAdd(1000)">+1L</button>
+        </div>
+    </div>
         <!-- Weekly Stats Card -->
         <div class="card mb-4">
             <div class="card-body">
@@ -172,593 +166,9 @@
                 </div>
             </div>
         </div>
-
-        <!-- Social & Achievements Section -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#achievements" role="tab">Achievements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#leaderboard" role="tab">Leaderboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#challenges" role="tab">Challenges</a>
-                    </li>
-                </ul>
-                
-                <div class="tab-content mt-3">
-                    <div class="tab-pane fade show active" id="achievements" role="tabpanel">
-                        <div class="d-flex flex-wrap gap-2">
-                            <div class="achievement" title="First Drop" data-bs-toggle="tooltip">
-                                <i class="bi bi-droplet-fill text-primary"></i>
-                                <p class="small mb-0">First water logged</p>
-                            </div>
-                            <div class="achievement" title="Week Warrior" data-bs-toggle="tooltip">
-                                <i class="bi bi-calendar-check text-success"></i>
-                                <p class="small mb-0">7-day streak</p>
-                            </div>
-                            <div class="achievement" title="Goal Crusher" data-bs-toggle="tooltip">
-                                <i class="bi bi-trophy text-warning"></i>
-                                <p class="small mb-0">Hit goal 5 days</p>
-                            </div>
-                            <div class="achievement" title="Early Bird" data-bs-toggle="tooltip">
-                                <i class="bi bi-sunrise text-info"></i>
-                                <p class="small mb-0">Morning routine</p>
-                            </div>
-                            <div class="achievement" title="Perfect Week" data-bs-toggle="tooltip">
-                                <i class="bi bi-stars text-warning"></i>
-                                <p class="small mb-0">100% goals met</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane fade" id="leaderboard" role="tabpanel">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Rank</th>
-                                        <th>User</th>
-                                        <th>Streak</th>
-                                        <th>Points</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="leaderboardTable">
-                                    <!-- Leaderboard data will be populated dynamically -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane fade" id="challenges" role="tabpanel">
-                        <div class="row g-3" id="challengesList">
-                            <div class="col-md-6">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Morning Hydration</h5>
-                                        <p class="card-text">Drink 500ml within 30 minutes of waking up</p>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">3/5 days</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Consistency King</h5>
-                                        <p class="card-text">Meet your daily goal for 7 consecutive days</p>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">4/7 days</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Smart Hydration Assistant -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h3>Smart Hydration Assistant</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card bg-light mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title"><i class="bi bi-cloud-sun me-2"></i>Weather Impact</h5>
-                                <p id="weatherInfo" class="mb-2">Current weather: <span class="fw-bold">28°C, Sunny</span></p>
-                                <p id="weatherTip" class="mb-0 text-muted small">Hot weather increases fluid needs. Consider drinking an extra 500ml today.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <h5 class="card-title"><i class="bi bi-activity me-2"></i>Activity Level</h5>
-                                <select class="form-select mb-2" id="activityLevel">
-                                    <option value="low">Low (Mostly sitting)</option>
-                                    <option value="moderate">Moderate (Regular walking)</option>
-                                    <option value="high">High (Exercise/Sports)</option>
-                                </select>
-                                <p id="activityTip" class="mb-0 text-muted small">Adjust your intake based on activity level</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <h5><i class="bi bi-lightbulb me-2"></i>Personalized Tips</h5>
-                    <div id="hydrationTip" class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        <span id="tipText">Remember to drink water first thing in the morning to kickstart your metabolism!</span>
-                    </div>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <span class="badge bg-light text-dark p-2">Morning routine</span>
-                        <span class="badge bg-light text-dark p-2">Post-workout</span>
-                        <span class="badge bg-light text-dark p-2">Meal times</span>
-                        <span class="badge bg-light text-dark p-2">Before bed</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="system-status mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="database-status">
-                        <span class="me-2">Database Status:</span>
-                        {% if db_status %}
-                        <span class="badge bg-success">Connected</span>
-                        {% else %}
-                        <span class="badge bg-danger">Disconnected</span>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <select class="form-select me-2" id="notificationFrequency" onchange="updateNotificationSettings()">
-                            <option value="1">Once a day</option>
-                            <option value="2">Twice a day</option>
-                            <option value="3">Three times a day</option>
-                            <option value="4">Four times a day</option>
-                            <option value="6">Six times a day</option>
-                        </select>
-                        <button id="testSMS" class="btn btn-primary btn-sm">
-                            Test SMS Notification
-                        </button>
-                    </div>
-                </div>
-            </div>
-        <div class="water-bg" id="waterBackground"></div>
-        <div class="water-progress dashboard-card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Water Progress</h5>
-                <div class="water-glass" id="waterGlass" onclick="quickAdd(250)">
-                    <div class="water-level" id="waterLevel" style="height: 0%"></div>
-                </div>
-                <div class="quick-add-container">
-                    <button class="quick-add-btn" onclick="quickAdd(100)">100ml</button>
-                    <button class="quick-add-btn" onclick="quickAdd(250)">250ml</button>
-                    <button class="quick-add-btn" onclick="quickAdd(500)">500ml</button>
-                </div>
-                <div class="mt-2 text-center">
-                    <span id="currentIntake">0 ml</span> / <span id="dailyGoal">2500 ml</span>
-                </div>
-                <div class="text-center mt-3">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWaterModal">
-                        <i class="bi bi-plus-circle"></i> Custom Amount
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- AI Analytics Section -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h3><i class="bi bi-robot"></i> AI-Powered Insights</h3>
-                <div class="row">
-                    <!-- Progress Metrics -->
-                    <div class="col-md-4">
-                        <div class="metric-card">
-                            <h5>Consistency Score</h5>
-                            <div class="metric-value" id="consistencyScore">0</div>
-                            <div class="metric-label">out of 100</div>
-                            <div class="trend-indicator" id="consistencyTrend">
-                                <i class="bi bi-arrow-up-circle text-success"></i>
-                                <span>Improving</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="metric-card">
-                            <h5>Goal Achievement Rate</h5>
-                            <div class="metric-value" id="goalAchievementRate">0%</div>
-                            <div class="metric-label">of targets met</div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="metric-card">
-                            <h5>Hydration Quality</h5>
-                            <div class="metric-value" id="hydrationQuality">A+</div>
-                            <div class="metric-label">overall rating</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- AI Recommendations -->
-                <div class="mt-4">
-                    <h5><i class="bi bi-lightbulb"></i> Smart Recommendations</h5>
-                    <div id="aiRecommendations" class="recommendations-container">
-                        <!-- Recommendations will be populated by AI -->
-                    </div>
-                </div>
-                
-                <!-- Personalized Insights -->
-                <div class="mt-4">
-                    <h5><i class="bi bi-graph-up"></i> Personalized Insights</h5>
-                    <div id="aiInsights" class="insights-container">
-                        <!-- Insights will be populated by AI -->
-                    </div>
-                </div>
-                    <div class="col-md-4">
-                        <div class="metric-card">
-                            <h5>Goal Achievement</h5>
-                            <div class="metric-value" id="goalAchievementRate">0%</div>
-                            <div class="metric-label">of daily targets met</div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="metric-card">
-                            <h5>Trend Analysis</h5>
-                            <div class="metric-value" id="trendIndicator"><i class="bi bi-graph-up"></i></div>
-                            <div class="metric-label" id="trendDescription">Analyzing...</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AI Recommendations -->
-                <div class="mt-4">
-                    <h5><i class="bi bi-lightbulb me-2"></i>Smart Recommendations</h5>
-                    <div id="aiRecommendations" class="recommendations-container">
-                        <!-- Recommendations will be populated by AI -->
-                    </div>
-                </div>
-
-                <!-- Analytics Charts -->
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <div class="chart-container">
-                            <h5>Intake Pattern Analysis</h5>
-                            <canvas id="intakePatternChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="chart-container">
-                            <h5>Goal Progress Tracking</h5>
-                            <canvas id="goalProgressChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AI Insights Panel -->
-                <div class="mt-4">
-                    <h5><i class="bi bi-graph-up me-2"></i>Trend Insights</h5>
-                    <div id="aiInsights" class="insights-container">
-                        <!-- AI-generated insights will be displayed here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="water-log">
-            <h3>Water Log</h3>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Amount (ml)</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="waterLogTable">
-                        <!-- Water log entries will be added here dynamically -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Add Water Button -->
-        <button class="btn btn-primary add-water-btn" data-bs-toggle="modal" data-bs-target="#addWaterModal">
-            <i class="bi bi-plus"></i>
-        </button>
-    </div>
-
-    <!-- Add Water Modal -->
-    <div class="modal fade" id="addWaterModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Water Intake</h5>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <!-- Notification Settings Modal -->
-                <div class="modal fade" id="notificationSettingsModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Notification Settings</h5>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="notificationSettingsForm">
-                                    <div class="form-group">
-                                        <label for="notificationFrequency">Daily Notifications:</label>
-                                        <select class="form-control" id="notificationFrequency" name="frequency">
-                                            <option value="1">Once a day</option>
-                                            <option value="2">Twice a day</option>
-                                            <option value="3">Three times a day</option>
-                                            <option value="4">Four times a day</option>
-                                            <option value="6">Six times a day</option>
-                                            <option value="8">Eight times a day</option>
-                                        </select>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="updateNotificationSettings()">Save changes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <form id="addWaterForm">
-                        <div class="mb-3">
-                            <label for="waterAmount" class="form-label">Amount (ml)</label>
-                            <input type="number" class="form-control" id="waterAmount" required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="addWaterIntake()">Add</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/water-tracker.js"></script>
-    <script>
-        // Load user profile and initialize dashboard
-        function loadUserProfile() {
-            fetch('/get-user-profile')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('profileName').textContent = data.name;
-                    document.getElementById('profilePhone').textContent = data.phone;
-                    const initials = data.name.split(' ').map(n => n[0]).join('').toUpperCase();
-                    document.querySelector('.profile-icon').textContent = initials;
-                    
-                    // Initialize other dashboard components
-                    updateWeatherInfo();
-                    updateLeaderboard();
-                    updateChallenges();
-                    initializeTooltips();
-                })
-                .catch(error => console.error('Error loading profile:', error));
-        }
-
-        // Initialize Bootstrap tooltips
-        function initializeTooltips() {
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        }
-
-        // Update weather information
-        function updateWeatherInfo() {
-            // In a real application, this would fetch from a weather API
-            fetch('/get-weather')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('weatherInfo').innerHTML = `Current weather: <span class="fw-bold">${data.temperature}°C, ${data.condition}</span>`;
-                    document.getElementById('weatherTip').textContent = data.recommendation;
-                    document.getElementById('weatherAdjustment').textContent = data.adjustment;
-                    updateFinalRecommendation();
-                })
-                .catch(error => console.error('Error updating weather:', error));
-        }
-
-        // Update leaderboard
-        function updateLeaderboard() {
-            fetch('/get-leaderboard')
-                .then(response => response.json())
-                .then(data => {
-                    const leaderboardTable = document.getElementById('leaderboardTable');
-                    leaderboardTable.innerHTML = '';
-                    data.forEach((user, index) => {
-                        leaderboardTable.innerHTML += `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${user.name}</td>
-                                <td>${user.streak} days</td>
-                                <td>${user.points}</td>
-                            </tr>
-                        `;
-                    });
-                })
-                .catch(error => console.error('Error updating leaderboard:', error));
-        }
-
-        // Update challenges progress
-        function updateChallenges() {
-            fetch('/get-challenges')
-                .then(response => response.json())
-                .then(data => {
-                    // Update challenge progress bars and status
-                    data.forEach(challenge => {
-                        const progressBar = document.querySelector(`#${challenge.id} .progress-bar`);
-                        if (progressBar) {
-                            const progress = (challenge.current / challenge.target) * 100;
-                            progressBar.style.width = `${progress}%`;
-                            progressBar.textContent = `${challenge.current}/${challenge.target} ${challenge.unit}`;
-                        }
-                    });
-                })
-                .catch(error => console.error('Error updating challenges:', error));
-        }
-
-        // Update final recommendation based on all factors
-        function updateFinalRecommendation() {
-            const baseRecommendation = parseInt(document.getElementById('recommendedIntake').textContent);
-            const weatherAdj = parseInt(document.getElementById('weatherAdjustment').textContent);
-            const activityAdj = parseInt(document.getElementById('activityAdjustment').textContent);
-            
-            const final = baseRecommendation + weatherAdj + activityAdj;
-            document.getElementById('finalRecommendation').textContent = `${final} ml`;
-        }
-
-        // Handle activity level changes
-        document.getElementById('activityLevel').addEventListener('change', function(e) {
-            const level = e.target.value;
-            let adjustment = 0;
-            switch(level) {
-                case 'low':
-                    adjustment = 0;
-                    break;
-                case 'moderate':
-                    adjustment = 300;
-                    break;
-                case 'high':
-                    adjustment = 600;
-                    break;
-            }
-            document.getElementById('activityAdjustment').textContent = `+${adjustment} ml`;
-            updateFinalRecommendation();
-        });
-
-
-        // Function to update notification settings
-        function updateNotificationSettings() {
-            const frequency = document.getElementById('notificationFrequency').value;
-            fetch('/update-notification-settings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ frequency: parseInt(frequency) })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Notification settings updated successfully!');
-                }
-            })
-            .catch(error => {
-                console.error('Error updating notification settings:', error);
-                alert('Failed to update notification settings');
-            });
-        }
-
-        // Load profile and initialize notification frequency on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUserProfile();
-            // Get current notification frequency
-            fetch('/get-user-profile')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.notification_frequency) {
-                        document.getElementById('notificationFrequency').value = data.notification_frequency;
-                    }
-                })
-                .catch(error => console.error('Error loading notification settings:', error));
-        });
-
-        // Handle SMS test notification
-        document.getElementById('testSMS').addEventListener('click', function() {
-            this.disabled = true;
-            fetch('/test-sms', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('SMS test notification sent successfully!');
-                } else {
-                    alert('Failed to send SMS notification: ' + data.message);
-                }
-            })
-            .catch(error => {
-                alert('Error sending test notification: ' + error);
-            })
-            .finally(() => {
-                this.disabled = false;
-            });
-        });
-
-        // Function to update water intake
-        function addWaterIntake() {
-            const amount = document.getElementById('waterAmount').value;
-            fetch('/add-water', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ amount: amount })
-            })
-            .then(response => response.json())
-            .then(data => {
-                updateDashboard();
-                document.getElementById('addWaterForm').reset();
-                document.getElementById('addWaterModal').classList.remove('show');
-            });
-        }
-
-        // Function to update dashboard
-        function updateDashboard() {
-            fetch('/get-water-data')
-                .then(response => response.json())
-                .then(data => {
-                    const progress = (data.current_intake / data.daily_goal) * 100;
-                    document.getElementById('waterProgress').style.width = `${progress}%`;
-                    document.getElementById('currentIntake').textContent = `${data.current_intake} ml`;
-                    document.getElementById('dailyGoal').textContent = `Goal: ${data.daily_goal} ml`;
-                    
-                    // Update water log table
-                    const logTable = document.getElementById('waterLogTable');
-                    logTable.innerHTML = '';
-                    data.log.forEach(entry => {
-                        logTable.innerHTML += `
-                            <tr>
-                                <td>${entry.time}</td>
-                                <td>${entry.amount} ml</td>
-                                <td>
-                                    <button class="btn btn-sm btn-danger" onclick="deleteEntry('${entry.id}')">Delete</button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                });
-        }
-
-        // Function to delete water log entry
-        function deleteEntry(entryId) {
-            fetch(`/delete-entry/${entryId}`, { method: 'DELETE' })
-                .then(response => response.json())
-                .then(data => {
-                    updateDashboard();
-                });
-        }
-
-        // Update dashboard on load
-        document.addEventListener('DOMContentLoaded', updateDashboard);
-    </script>
 </body>
 </html>

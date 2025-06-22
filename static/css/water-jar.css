@@ -1,0 +1,227 @@
+/* Water Jar Visualization Styles */
+
+.water-jar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.water-jar {
+    width: 200px;
+    height: 400px;
+    border: 5px solid #2196F3;
+    border-radius: 0 0 20px 20px;
+    position: relative;
+    margin: 20px auto;
+    background: white;
+    overflow: visible;
+}
+
+.water-jar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -30px;
+    width: 2px;
+    height: 100%;
+    background: #2196F3;
+}
+
+.measurement {
+    position: absolute;
+    right: -60px;
+    color: #2196F3;
+    font-weight: bold;
+    font-size: 14px;
+    transform: translateY(-50%);
+}
+
+.measurement::after {
+    content: '';
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    width: 10px;
+    height: 2px;
+    background: #2196F3;
+}
+
+.measurement-3000 { top: 0; }
+.measurement-2000 { top: 33.33%; }
+.measurement-1000 { top: 66.66%; }
+.measurement-0 { top: 100%; }
+
+.water-jar::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, #2196F3, #64B5F6);
+    transition: height 0.3s ease;
+}
+
+.water-jar {
+    --current-intake: 0;
+    --goal-intake: 2500;
+}
+
+.water-jar[data-goal]:before {
+    height: calc(var(--current-intake) / var(--goal-intake) * 100%);
+    min-height: 0%;
+    max-height: 100%;
+    transition: height 0.5s ease-in-out;
+}
+
+.water-jar[data-goal] {
+    --goal-intake: attr(data-goal number, 2500);
+}
+
+.water-level-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #1976D2;
+    font-weight: bold;
+    z-index: 1;
+    bottom: 10px;
+}
+
+.water-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(180deg, rgba(79, 195, 247, 0.8) 0%, rgba(33, 150, 243, 0.9) 100%);
+    transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0 0 28px 28px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.wave {
+    position: absolute;
+    top: -25px;
+    left: -100px;
+    width: 400px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: wave 3s infinite linear;
+}
+
+.wave2 {
+    top: -15px;
+    animation-delay: 0.5s;
+    opacity: 0.6;
+}
+
+@keyframes wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100px); }
+}
+
+.jar-measurements {
+    position: absolute;
+    right: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.measurement {
+    position: absolute;
+    right: 0;
+    color: rgba(73, 155, 234, 0.8);
+    font-size: 12px;
+    font-weight: 500;
+    transform: translateY(50%);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.measurement::before {
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    background: rgba(73, 155, 234, 0.5);
+    border-radius: 1px;
+}
+
+.water-info {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.water-info h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.quick-add-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Profile Icons Styling */
+.profile-icon {
+    font-size: 2rem;
+    color: #2196F3;
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.2) 100%);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.15);
+}
+
+/* Quick Add Button Styling */
+.quick-add-container .btn {
+    padding: 10px 20px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    border: none;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+}
+
+.quick-add-container .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
+}
+
+.quick-add-container .btn i {
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+.quick-add-container .btn {
+    padding: 10px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.quick-add-container .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
